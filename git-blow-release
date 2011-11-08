@@ -18,7 +18,7 @@ cmd_help() {
 }
 
 cmd_release() {
-	require_clean_working_tree
+    require_clean_working_tree
     git blow tag
     CURRENT_VERSION=$(git for-each-ref --sort='*authordate' --format='%(refname:short)' refs/tags | tail -n 1)
     if [[ "$CURRENT_VERSION" == *.* ]]; then

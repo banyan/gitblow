@@ -5,16 +5,16 @@ require_gitflow_initialized
 gitflow_load_settings
 
 usage() {
-	echo "usage: git blow tag"
+    echo "usage: git blow tag"
 }
 
 cmd_help() {
-	usage
-	exit 0
+    usage
+    exit 0
 }
 
 cmd_default() {
-	cmd_tag
+    cmd_tag
 }
 
 cmd_tag() {
