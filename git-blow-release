@@ -1,0 +1,42 @@
+#!/bin/sh
+
+require_git_repo
+require_gitflow_initialized
+gitflow_load_settings
+
+usage() {
+	echo "usage: git blow release"
+}
+
+cmd_default() {
+	cmd_release
+}
+
+cmd_help() {
+	usage
+	exit 0
+}
+
+cmd_release() {
+	require_clean_working_tree
+    git blow tag
+    CURRENT_VERSION=$(git for-each-ref --sort='*authordate' --format='%(refname:short)' refs/tags | tail -n 1)
+    if [[ "$CURRENT_VERSION" == *.* ]]; then
+        majorpart="${CURRENT_VERSION%.*}."
+    else
+        majorpart="0.0."
+    fi
+    minorpart="${CURRENT_VERSION##*.}"
+    NEXT_VERSION="$majorpart$((minorpart+1))"
+
+    while true; do
+        echo ""
+        echo "It would appear that next tag will be \"$NEXT_VERSION\"."
+        read -p "Are you sure to bump version to \"$NEXT_VERSION\" [Y/n]? " yn
+        case $yn in
+            [Yy]* ) git flow release start $NEXT_VERSION && git flow release finish $NEXT_VERSION; break;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}

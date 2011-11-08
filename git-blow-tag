@@ -1,0 +1,24 @@
+#!/bin/sh
+
+require_git_repo
+require_gitflow_initialized
+gitflow_load_settings
+
+usage() {
+	echo "usage: git blow tag"
+}
+
+cmd_help() {
+	usage
+	exit 0
+}
+
+cmd_default() {
+	cmd_tag
+}
+
+cmd_tag() {
+    COUNT=15
+    git fetch && \
+        git for-each-ref --sort='*authordate' --format='%(refname:short)' refs/tags | tail -n 15
+}

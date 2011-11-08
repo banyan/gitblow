@@ -1,0 +1,35 @@
+#!/bin/sh
+
+require_git_repo
+require_gitflow_initialized
+gitflow_load_settings
+
+usage() {
+	echo "usage: git blow sync"
+	echo "       git flow release start [-F] <version> [<base>]"
+	echo "       git flow release finish [-Fsumpk] <version>"
+	echo "       git flow release publish <name>"
+	echo "       git flow release track <name>"
+}
+
+cmd_default() {
+	cmd_sync
+}
+
+cmd_help() {
+	usage
+	exit 0
+}
+
+cmd_sync() {
+	require_clean_working_tree
+    git checkout master
+    git pull origin master
+    git checkout develop
+    git pull origin develop
+
+	echo
+	echo "Summary of actions:"
+	echo "- master and develop branches are up-to-date."
+	echo
+}
